@@ -5,14 +5,129 @@ import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
+import Collection from 'react-materialize/lib/Collection';
 
 class ListScreen extends Component {
     state = {
         name: '',
         owner: '',
+        ifClicked: false
     }
 
-    ifClicked = false;
+    initialBooleans = () => {
+        window.isTaskSorted = false;
+        window.isStatusSorted = false;
+        window.isDueDateSorted = false;
+    }
+
+    sortItems = (sortingCriterial, listID) =>
+    {   
+
+        getFirestore().collection("todoLists").doc(listID).get().then(function(doc) {
+            let items = doc.data().items;
+            let compare = (item1, item2) => {
+                if (sortingCriterial==='task')
+                {
+                    if (window.isTaskSorted)
+                    {
+                        let temp = item1;
+                        item1 = item2;
+                        item2 = temp;
+                    }
+                    if (item1.description < item2.description)
+                        return -1;
+                    else if (item1.description> item2.description)
+                        return 1;
+                    else
+                        return 0;
+                }
+                else if(sortingCriterial==='due_date')
+                {
+                    if (window.isDueDateSorted)
+                    {
+                        let temp = item1;
+                        item1 = item2;
+                        item2 = temp;
+                    }
+                    if (item1.due_date < item2.due_date)
+                        return -1;
+                    else if(item1.due_date> item2.due_date)
+                        return 1;
+                    else
+                        return 0;
+
+                }
+                else
+                {
+                    if (window.isStatusSorted)
+                    {
+                        let temp = item1;
+                        item1 = item2;
+                        item2 = temp;
+                    }
+                    if (item1.completed < item2.completed)
+                        return -1;
+                    else if (item1.completed > item2.completed)
+                        return 1;
+                    else
+                        return 0;
+                }
+
+            };
+            
+            if (sortingCriterial==="task")
+            {
+                console.log("task");
+                items.sort(compare);
+                if (window.isTaskSorted)
+                {
+                    window.isTaskSorted=false;
+                }
+                else
+                {
+                    window.isTaskSorted=true;
+                }
+                window.isStatusSorted=false;
+                window.isDueDateSorted=false;
+            }
+            else if(sortingCriterial==="due_date")
+            {
+                console.log("due_date");
+                items.sort(compare);
+                if (window.isDueDateSorted)
+                {
+                    window.isDueDateSorted = false;
+                }
+                else
+                {
+                    window.isDueDateSorted = true;
+                }
+
+                window.isStatusSorted = false;
+                window.isTaskSorted = false;
+    
+            }
+            else if(sortingCriterial==="status")
+            {
+                console.log("status");
+                items.sort(compare);
+                if (window.isStatusSorted)
+                {
+                    window.isStatusSorted = false;
+                }
+                else{
+                    window.isStatusSorted = true;
+                }
+                window.isTaskSorted = false;
+                window.isDueDateSorted = false;
+            }
+
+            getFirestore().collection("todoLists").doc(listID).update({
+                items:items
+            })
+
+        })
+    }
 
     setNewTime = (todoList) => {
         getFirestore().collection("todoLists").doc(todoList.id).update({
@@ -71,6 +186,7 @@ class ListScreen extends Component {
 
     }
 
+
     render() {
         const auth = this.props.auth;
         const todoList = this.props.todoList;
@@ -81,9 +197,10 @@ class ListScreen extends Component {
         if(!todoList){
 	        return <React.Fragment />
         }
-        if (!this.ifClicked){
+        if (!this.state.ifClicked){
             this.setNewTime(todoList);
-            this.ifClicked = true;
+            this.initialBooleans();
+            this.state.ifClicked = true;
         }
         return (
             <div className="container white">
@@ -102,7 +219,7 @@ class ListScreen extends Component {
                 </div>
                 </div>
                 <h5 className="grey-text text-darken-3">Todo List</h5>
-                <div id="list_trash" onClick={this.showDeleteListDialog}>&#128465;</div>
+                <div id="list_trash" style={{top:"10%"}} onClick={this.showDeleteListDialog}>&#128465;</div>
                 <div className="input-field">
                     <label htmlFor="email" className="active">Name</label>
                     <input className="active" type="text" name="name" id="name" onChange={this.handleNameChange} defaultValue={todoList.name} />
@@ -114,15 +231,15 @@ class ListScreen extends Component {
 
                 <div className="list_item_header_card">
                 <div className="list_item_task_header"
-                //onClick={this.props.sortTasks.bind(this, "task")}
+                onClick={() =>this.sortItems("task",this.props.todoList.id)}
                 >
                     Task</div>
                 <div className="list_item_due_date_header"
-                //onClick={this.props.sortTasks.bind(this, "dueDate")}
+                onClick={() =>this.sortItems("due_date", this.props.todoList.id)}
                 >
                     Due Date</div>
                 <div className="list_item_status_header"
-                //onClick={this.props.sortTasks.bind(this, "status")}
+                onClick={() => this.sortItems("status", this.props.todoList.id)}
                 >
                     Status</div>
                 </div>

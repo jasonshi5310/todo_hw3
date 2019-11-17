@@ -19,8 +19,11 @@ class ItemsList extends React.Component {
             <div className="todo-lists section">
                 {items && items.map(function(item) {
                     item.id = item.key;
+                    let index = items.indexOf(item);
                     return (
-                        <ItemCard todoList={todoList} item={item} />
+                        <ItemCard todoList={todoList} item={item} index={index} 
+                        isLast = {index===items.length-1} isFirst = {index===0}
+                        />
                     );})
                 }
                 <center className="list_item_card">

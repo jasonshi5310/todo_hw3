@@ -1,10 +1,11 @@
 import React from 'react';
 import {Button, Icon} from 'react-materialize';
+import {getFirestore} from 'redux-firestore';
 
 class ItemCard extends React.Component {
 
-    isComplete = () => {
-        if (this.props.completed)
+    isComplete = (item) => {
+        if (item.completed)
             return <div className='list_item_card_completed'> Completed
             </div>;
         else
@@ -12,8 +13,68 @@ class ItemCard extends React.Component {
             </div>;
     }
 
+    removeItem = () => {
+        console.log(this.props.index);
+        let index = this.props.index;
+        let listID = this.props.todoList.id;
+        getFirestore().collection("todoLists").doc(listID).get().then(function(doc) {
+            let items = doc.data().items;
+            items.splice(index,1);
+            getFirestore().collection("todoLists").doc(listID).update({
+                items:items
+            })
+        });
+
+
+    }
+
+    moveUp = () => {
+        console.log(this.props.index);
+        let index = this.props.index;
+        let listID = this.props.todoList.id;
+        getFirestore().collection("todoLists").doc(listID).get().then(function(doc) {
+            let items = doc.data().items;
+            let temp = items[index-1];
+            items[index-1]=items[index];
+            items[index]=temp;
+            getFirestore().collection("todoLists").doc(listID).update({
+                items:items
+            })
+        });
+
+    }
+
+    moveDown = () => {
+        console.log(this.props.index);
+        let index = this.props.index;
+        let listID = this.props.todoList.id;
+        getFirestore().collection("todoLists").doc(listID).get().then(function(doc) {
+            let items = doc.data().items;
+            let temp = items[index+1];
+            items[index+1]=items[index];
+            items[index]=temp;
+            getFirestore().collection("todoLists").doc(listID).update({
+                items:items
+            })
+        });
+    }
+
+    isFirst = () => 
+    {
+        if (this.props.isFirst)
+            return true;
+        return false;
+    }
+
+    isLast = () => 
+    {
+        if (this.props.isLast)
+            return true;
+        return false;
+    }
+
     render() {
-        const { item } = this.props;  
+        const { item } = this.props;
         return (
             <div className="list_item_card">
                 {/* <div className="card-content grey-text text-darken-3">
@@ -28,29 +89,32 @@ class ItemCard extends React.Component {
                 <div className='list_item_card_due_date'>
                     {item.due_date}
                 </div>
-                {this.isComplete()}
-                <div className='list_item_card_toolbar'>
-                    {/* {this.upArrow()}
-                    {this.downArrow()}
-                    {this.removeItem()} */}
+                {this.isComplete(item)}
+                <div
+                >
                     <Button
                     floating
                     fab={{direction: 'left'}}
                     className="green"
                     style={{position:'absolute', height:"20px"}}
                     >
-                        <Button floating icon={<Icon children="remove_circle_outline"/>} className="red" 
-                        style={{left:'40px',right:'10px', bottom:"8px"}}
-                        />
                         <Button floating icon={<Icon children="arrow_upward"/>} className="yellow darken-1" 
                         style={{left:'40px',right:'10px',bottom:"8px"}}
+                        onClick = {() => this.moveUp()}
+                        disabled = {this.isFirst()}
                         />
                         <Button floating icon={<Icon children="arrow_downward"/>} className="blue" 
                         style={{left:'40px',right:'10px', bottom:'8px'}}
+                        disabled = {this.isLast()}
+                        onClick = {() => this.moveDown()}
+                        />
+                        <Button floating icon={<Icon children="remove_circle_outline"/>} className="red" 
+                        style={{left:'40px',right:'10px', bottom:"8px"}}
+                        onClick = {() => this.removeItem()}
                         />
                     </Button>
+                    
                 </div>
-
             </div>
         );
     }
