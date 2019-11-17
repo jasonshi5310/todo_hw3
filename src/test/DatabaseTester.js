@@ -9,6 +9,7 @@ class DatabaseTester extends React.Component {
     // DO THIS ANY TIME YOU LIKE WITHOUT HAVING
     // TO LOG IN
     handleClear = () => {
+        console.log("cleared")
         const fireStore = getFirestore();
         fireStore.collection('todoLists').get().then(function(querySnapshot){
             querySnapshot.forEach(function(doc) {
