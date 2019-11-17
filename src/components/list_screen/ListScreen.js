@@ -4,11 +4,24 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
+import { getFirestore } from 'redux-firestore';
 
 class ListScreen extends Component {
     state = {
         name: '',
         owner: '',
+    }
+
+    ifClicked = false;
+
+    setNewTime = (todoList) => {
+        getFirestore().collection("todoLists").doc(todoList.id).update({
+            time: Date.now()
+        }).then(() => {
+            console.log("New Time Set");
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     handleChange = (e) => {
@@ -23,21 +36,27 @@ class ListScreen extends Component {
     render() {
         const auth = this.props.auth;
         const todoList = this.props.todoList;
+
         if (!auth.uid) {
             return <Redirect to="/" />;
         }
-        if(!todoList)
+        if(!todoList){
 	        return <React.Fragment />
+        }
+        if (!this.ifClicked){
+            this.setNewTime(todoList);
+            this.ifClicked = true;
+        }
         return (
             <div className="container white">
                 <h5 className="grey-text text-darken-3">Todo List</h5>
                 <div className="input-field">
                     <label htmlFor="email">Name</label>
-                    <input className="active" type="text" name="name" id="name" onChange={this.handleChange} value={todoList.name} />
+                    <input className="active" type="text" name="name" id="name" onChange={this.handleChange} defaultValue={todoList.name} />
                 </div>
                 <div className="input-field">
                     <label htmlFor="password">Owner</label>
-                    <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} value={todoList.owner} />
+                    <input className="active" type="text" name="owner" id="owner" onChange={this.handleChange} defaultValue={todoList.owner} />
                 </div>
                 <ItemsList todoList={todoList} />
             </div>

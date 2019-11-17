@@ -15,7 +15,7 @@ class HomeScreen extends Component {
             name: "unknown",
             owner: "unknown",
             items: [],
-            time: Date.UTC(2077,3,16,19,32,11),
+            time: Date.UTC(2077,3,16,19,32,11)
         })
 
         this.props.history.push({
@@ -63,6 +63,6 @@ const mapStateToProps = (state) => {
 export default compose(
     connect(mapStateToProps),
     firestoreConnect([
-      { collection: 'todoLists' },
+      { collection: 'todoLists', orderBy:['time', 'desc'] },
     ]),
 )(HomeScreen);
