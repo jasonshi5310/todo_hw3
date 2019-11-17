@@ -243,7 +243,7 @@ class ListScreen extends Component {
                 >
                     Status</div>
                 </div>
-                <ItemsList todoList={todoList} />
+                <ItemsList todoList={todoList}/>
             </div>
         );
     }

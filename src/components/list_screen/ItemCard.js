@@ -41,6 +41,9 @@ class ItemCard extends React.Component {
                 items:items
             })
         });
+        window.isTaskSorted = false;
+        window.isStatusSorted = false;
+        window.isDueDateSorted = false;
 
     }
 
@@ -57,6 +60,9 @@ class ItemCard extends React.Component {
                 items:items
             })
         });
+        window.isTaskSorted = false;
+        window.isStatusSorted = false;
+        window.isDueDateSorted = false;
     }
 
     isFirst = () => 
