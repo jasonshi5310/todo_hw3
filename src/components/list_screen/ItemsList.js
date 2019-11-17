@@ -9,6 +9,9 @@ class ItemsList extends React.Component {
 
     addNewItem = () => {
         console.log("add new item");
+        this.props.history.push({
+            pathname: "ItemScreen"
+        });
     }
 
     render() {

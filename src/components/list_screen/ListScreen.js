@@ -200,7 +200,10 @@ class ListScreen extends Component {
         if (!this.state.ifClicked){
             this.setNewTime(todoList);
             this.initialBooleans();
-            this.state.ifClicked = true;
+            this.setState(state => ({
+                ...state,
+                ifClicked: true,
+            }));
         }
         return (
             <div className="container white">
@@ -243,7 +246,7 @@ class ListScreen extends Component {
                 >
                     Status</div>
                 </div>
-                <ItemsList todoList={todoList}/>
+                <ItemsList todoList={todoList} history={this.props.history}/>
             </div>
         );
     }
