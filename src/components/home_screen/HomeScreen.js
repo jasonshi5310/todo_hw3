@@ -2,10 +2,27 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { NavLink, Redirect } from 'react-router-dom';
-import { firestoreConnect } from 'react-redux-firebase';
+import { firestoreConnect, getFirebase } from 'react-redux-firebase';
 import TodoListLinks from './TodoListLinks'
+import { getFirestore } from 'redux-firestore';
 
 class HomeScreen extends Component {
+    handleNewList = () => 
+    {
+        // Create a new list
+        const newList = getFirestore().collection("todoLists").doc();
+        newList.set({
+            name: "unknown",
+            owner: "unknown",
+            items: [],
+            time: Date.UTC(2077,3,16,19,32,11),
+        })
+
+        this.props.history.push({
+            pathname: "todoList/"+newList.id,
+            key: newList.id
+        });
+    }
 
     render() {
         if (!this.props.auth.uid) {
