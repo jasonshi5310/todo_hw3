@@ -64,6 +64,7 @@ class ListScreen extends Component {
         return (
             <div className="container white">
                 <h5 className="grey-text text-darken-3">Todo List</h5>
+                <div id="list_trash" onClick={this.showDeleteListDialog}>&#128465;</div>
                 <div className="input-field">
                     <label htmlFor="email" className="active">Name</label>
                     <input className="active" type="text" name="name" id="name" onChange={this.handleNameChange} defaultValue={todoList.name} />
@@ -71,6 +72,21 @@ class ListScreen extends Component {
                 <div className="input-field">
                     <label htmlFor="password" className="active">Owner</label>
                     <input className="active" type="text" name="owner" id="owner" onChange={this.handleOwnerChange} defaultValue={todoList.owner} />
+                </div>
+
+                <div className="list_item_header_card">
+                <div className="list_item_task_header"
+                //onClick={this.props.sortTasks.bind(this, "task")}
+                >
+                    Task</div>
+                <div className="list_item_due_date_header"
+                //onClick={this.props.sortTasks.bind(this, "dueDate")}
+                >
+                    Due Date</div>
+                <div className="list_item_status_header"
+                //onClick={this.props.sortTasks.bind(this, "status")}
+                >
+                    Status</div>
                 </div>
                 <ItemsList todoList={todoList} />
             </div>
