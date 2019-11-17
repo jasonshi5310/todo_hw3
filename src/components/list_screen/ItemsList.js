@@ -3,8 +3,14 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import ItemCard from './ItemCard';
 import { firestoreConnect } from 'react-redux-firebase';
+import {Button, Icon} from 'react-materialize';
 
 class ItemsList extends React.Component {
+
+    addNewItem = () => {
+        console.log("add new item");
+    }
+
     render() {
         const todoList = this.props.todoList;
         const items = todoList.items;
@@ -17,6 +23,9 @@ class ItemsList extends React.Component {
                         <ItemCard todoList={todoList} item={item} />
                     );})
                 }
+                <center className="list_item_card">
+                <Button floating icon={<Icon children="add"/>} onClick={() => this.addNewItem()}/>
+                </center>
             </div>
         );
     }
