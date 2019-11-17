@@ -65,11 +65,11 @@ class ListScreen extends Component {
             <div className="container white">
                 <h5 className="grey-text text-darken-3">Todo List</h5>
                 <div className="input-field">
-                    <label htmlFor="email">Name</label>
+                    <label htmlFor="email" className="active">Name</label>
                     <input className="active" type="text" name="name" id="name" onChange={this.handleNameChange} defaultValue={todoList.name} />
                 </div>
                 <div className="input-field">
-                    <label htmlFor="password">Owner</label>
+                    <label htmlFor="password" className="active">Owner</label>
                     <input className="active" type="text" name="owner" id="owner" onChange={this.handleOwnerChange} defaultValue={todoList.owner} />
                 </div>
                 <ItemsList todoList={todoList} />
