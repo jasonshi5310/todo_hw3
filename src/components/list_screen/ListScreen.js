@@ -5,7 +5,6 @@ import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
-import Collection from 'react-materialize/lib/Collection';
 
 class ListScreen extends Component {
     state = {
@@ -18,6 +17,7 @@ class ListScreen extends Component {
         window.isTaskSorted = false;
         window.isStatusSorted = false;
         window.isDueDateSorted = false;
+        window.currentItem = null;
     }
 
     sortItems = (sortingCriterial, listID) =>
@@ -137,15 +137,6 @@ class ListScreen extends Component {
         }).catch((err) => {
             console.log(err);
         });
-    }
-
-    handleChange = (e) => {
-        const { target } = e;
-
-        this.setState(state => ({
-            ...state,
-            [target.id]: target.value,
-        }));
     }
 
     handleNameChange = (e) => {

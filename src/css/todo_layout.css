@@ -201,8 +201,8 @@ input[type=password]:not(.browser-default):focus:not([readonly]) + label{
     width: 70%;
 }
 #item_completed_prompt {}
-#item_completed_checkbox { 
-    /* right: 69.1%; */
+#item_completed_label { 
+    right: 67.2%;
     position: absolute;
 
 }
@@ -226,7 +226,7 @@ input[type=password]:not(.browser-default):focus:not([readonly]) + label{
 #list_delete_confirmation
 {
     position: fixed; 
-    z-index: 1; 
+    z-index: 4; 
     padding-top: 16%; 
     left: 0;
     top: 0;

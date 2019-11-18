@@ -102,7 +102,7 @@ class ItemCard extends React.Component {
                     floating
                     fab={{direction: 'left'}}
                     className="green"
-                    style={{position:'absolute', height:"20px"}}
+                    style={{position:'absolute', height:"20px", zIndex:1}}
                     >
                         <Button floating icon={<Icon children="arrow_upward"/>} className="yellow darken-1" 
                         style={{left:'40px',right:'10px',bottom:"8px"}}

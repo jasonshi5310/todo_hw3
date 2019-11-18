@@ -5,11 +5,50 @@ import { compose } from 'redux';
 import ItemsList from './ItemsList.js'
 import { firestoreConnect } from 'react-redux-firebase';
 import { getFirestore } from 'redux-firestore';
-import Collection from 'react-materialize/lib/Collection';
-import {checkbox} from 'react-materialize';
-import { hidden } from 'ansi-colors';
 
 class ItemScreen extends React.Component {
+
+    loadList = () => {
+        this.props.history.goBack();
+        window.currentItem = null;
+    }
+
+    submitNewItem = () => {
+        let description = document.getElementById("item_description_textfield").value;
+        let assignedTo = document.getElementById("item_assigned_to_textfield").value;
+        let dueDate = document.getElementById("item_due_date_picker").value;
+        let completed = document.getElementById("item_completed_checkbox").checked;
+        if (description === "") description = "unknown";
+        if (assignedTo === '') assignedTo = "unknown";
+        if (dueDate === '') dueDate = null; 
+        let listID = window.currentList.id;
+        getFirestore().collection('todoLists').doc(listID).get().then(function(doc){
+            let items = doc.data().items;
+            if (window.currentItem===null) // add a new item
+            {
+                let todoItem =  {
+                    "key": items.length+1,
+                    "description": description,
+                    "due_date": dueDate,
+                    "assigned_to": assignedTo,
+                    "completed": completed
+                };
+                items.push(todoItem);
+            }
+            else // edit a item
+            {
+                console.log(items.indexOf(window.currentItem))
+
+            }
+            getFirestore().collection("todoLists").doc(listID).update({
+                items:items
+            })
+        })
+        this.props.history.goBack();
+        window.currentItem = null;
+    }
+
+
     render() {
         return (
             <div id="add_new_item_page">
@@ -21,12 +60,12 @@ class ItemScreen extends React.Component {
                 <br/>
                 <div className = "add_new_item_header">
                     <span id= "item_description_prompt">Description:</span>
-                    <input type="text" id="item_description_textfield" />
+                    <input type="text" id="item_description_textfield" defaultValue="unknown"/>
                 </div>
                 <br/>
                 <div className = "add_new_item_header">
                     <span id = "item_assigned_to_prompt">Assigned To:</span>
-                    <input type="text" id="item_assigned_to_textfield" />
+                    <input type="text" id="item_assigned_to_textfield" defaultValue="unknown"/>
                 </div>
                 <br/>
                 <div className = "add_new_item_header">
@@ -36,14 +75,15 @@ class ItemScreen extends React.Component {
                 <br/>
                 <div className = "add_new_item_header">
                     <span id= "item_completed_prompt">Completed:</span>
-                    <checkbox id="item_completed_checkbox" />
+                    <label id ='item_completed_label'><input type="checkbox" id='item_completed_checkbox'/>
+                    <span></span></label>
                 </div>
                 <br/>
                 <button id="item_form_submit_button"
-                //onClick={this.props.submitNewItem.bind(this)}
+                onClick={this.submitNewItem}
                 >Submit</button>
                 <button id="item_form_cancel_button"
-                //onClick={this.props.loadList}
+                onClick={this.loadList}
                 >Cancel</button>
             </div>
     
