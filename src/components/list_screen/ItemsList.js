@@ -11,7 +11,11 @@ class ItemsList extends React.Component {
         console.log("add new item");
         window.currentList = this.props.todoList;
         this.props.history.push({
-            pathname: "ItemScreen"
+            pathname: "ItemScreen",
+            state :{
+                currentList: null,
+                currentIndex: -1
+            }
         });
     }
 

@@ -87,9 +87,13 @@ class ItemCard extends React.Component {
     editItem = () => {
         console.log("edit item");
         window.currentList = this.props.todoList;
-        window.currentItem = this.props.item;
+        window.currentIndex = this.props.index;
         this.props.history.push({
-            pathname: "ItemScreen"
+            pathname: "ItemScreen",
+            state :{
+                currentList: window.currentList,
+                currentIndex: window.currentIndex
+            }
         });
     }
 
