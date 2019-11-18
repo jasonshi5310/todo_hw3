@@ -38,6 +38,9 @@ class ItemScreen extends React.Component {
             else // edit a item
             {
                 console.log(items.indexOf(window.currentItem))
+                getFirestore().collection('todoLists').doc(listID).get('items').then(function(doc){
+                    console.log(doc);
+                })
 
             }
             getFirestore().collection("todoLists").doc(listID).update({
@@ -48,6 +51,20 @@ class ItemScreen extends React.Component {
         window.currentItem = null;
     }
 
+    loadItem = () => {
+        let item = window.currentItem;
+        if (item!==null){
+            console.log(item);
+            let description = document.getElementById("item_description_textfield");
+           let assignedTo = document.getElementById("item_assigned_to_textfield");
+           let dueDate = document.getElementById("item_due_date_picker");
+            let completed = document.getElementById("item_completed_checkbox");
+            description.value = item.description;
+            assignedTo.value = item.assigned_to;
+            dueDate.value = item.due_date;
+            completed.checked = item.completed;
+        }
+    }
 
     render() {
         return (
@@ -86,8 +103,8 @@ class ItemScreen extends React.Component {
                 onClick={this.loadList}
                 >Cancel</button>
             </div>
-    
             </div> 
+            
         )
     }
 }

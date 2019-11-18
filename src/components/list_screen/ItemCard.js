@@ -13,7 +13,8 @@ class ItemCard extends React.Component {
             </div>;
     }
 
-    removeItem = () => {
+    removeItem = (event) => {
+        event.stopPropagation();
         console.log(this.props.index);
         let index = this.props.index;
         let listID = this.props.todoList.id;
@@ -28,7 +29,9 @@ class ItemCard extends React.Component {
 
     }
 
-    moveUp = () => {
+    moveUp = (event) => {
+        //e.preventDefault();
+        event.stopPropagation();
         console.log(this.props.index);
         let index = this.props.index;
         let listID = this.props.todoList.id;
@@ -47,7 +50,9 @@ class ItemCard extends React.Component {
 
     }
 
-    moveDown = () => {
+    moveDown = (event) => {
+       // e.preventDefault();
+        event.stopPropagation();
         console.log(this.props.index);
         let index = this.props.index;
         let listID = this.props.todoList.id;
@@ -79,10 +84,19 @@ class ItemCard extends React.Component {
         return false;
     }
 
+    editItem = () => {
+        console.log("edit item");
+        window.currentList = this.props.todoList;
+        window.currentItem = this.props.item;
+        this.props.history.push({
+            pathname: "ItemScreen"
+        });
+    }
+
     render() {
         const { item } = this.props;
         return (
-            <div className="list_item_card">
+            <div className="list_item_card" onClick = {this.editItem}>
                 {/* <div className="card-content grey-text text-darken-3">
                     <span className="card-title">{item.description}</span>
                 </div> */}
@@ -103,20 +117,21 @@ class ItemCard extends React.Component {
                     fab={{direction: 'left'}}
                     className="green"
                     style={{position:'absolute', height:"20px", zIndex:1}}
+                    onClick={(event) => {event.stopPropagation()}}
                     >
                         <Button floating icon={<Icon children="arrow_upward"/>} className="yellow darken-1" 
                         style={{left:'40px',right:'10px',bottom:"8px"}}
-                        onClick = {() => this.moveUp()}
+                        onClick = {(event) => this.moveUp(event)}
                         disabled = {this.isFirst()}
                         />
                         <Button floating icon={<Icon children="arrow_downward"/>} className="blue" 
                         style={{left:'40px',right:'10px', bottom:'8px'}}
                         disabled = {this.isLast()}
-                        onClick = {() => this.moveDown()}
+                        onClick = {(event) => this.moveDown(event)}
                         />
                         <Button floating icon={<Icon children="remove_circle_outline"/>} className="red" 
                         style={{left:'40px',right:'10px', bottom:"8px"}}
-                        onClick = {() => this.removeItem()}
+                        onClick = {(event) => this.removeItem(event)}
                         />
                     </Button>
                     

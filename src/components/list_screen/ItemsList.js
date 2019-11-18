@@ -15,21 +15,20 @@ class ItemsList extends React.Component {
         });
     }
 
-    editItem = () => {
-        
-    }
-
     render() {
         const todoList = this.props.todoList;
         const items = todoList.items;
+        const history = this.props.history;
         console.log("ItemsList: todoList.id " + todoList.id);
         return (
             <div className="todo-lists section">
                 {items && items.map(function(item) {
                     item.id = item.key;
                     let index = items.indexOf(item);
+                    //let history = this.props.history;
                     return (
                         <ItemCard todoList={todoList} item={item} index={index} 
+                        history = {history}
                         isLast = {index===items.length-1} isFirst = {index===0}
                         />
                     );})
