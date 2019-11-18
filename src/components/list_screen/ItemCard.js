@@ -123,24 +123,29 @@ class ItemCard extends React.Component {
                     style={{position:'absolute', height:"20px", zIndex:1}}
                     onClick={(event) => {event.stopPropagation()}}
                     >
-                        <Button floating icon={<Icon children="arrow_upward"/>} className="yellow darken-1" 
+                        <Button floating icon={<Icon children="arrow_upward"/>}
+                        className="yellow darken-1" 
                         style={{left:'40px',right:'10px',bottom:"8px"}}
                         onClick = {(event) => this.moveUp(event)}
                         disabled = {this.isFirst()}
                         />
-                        <Button floating icon={<Icon children="arrow_downward"/>} className="blue" 
+                        <Button floating icon={<Icon children="arrow_downward"/>} 
+                        className="blue" 
                         style={{left:'40px',right:'10px', bottom:'8px'}}
                         disabled = {this.isLast()}
                         onClick = {(event) => this.moveDown(event)}
                         />
-                        <Button floating icon={<Icon children="remove_circle_outline"/>} className="red" 
+                        <Button floating icon={<Icon children="remove_circle_outline"/>} 
+                        className="red" 
                         style={{left:'40px',right:'10px', bottom:"8px"}}
                         onClick = {(event) => this.removeItem(event)}
                         />
                     </Button>
                     
                 </div>
+                
             </div>
+            
         );
     }
 }
