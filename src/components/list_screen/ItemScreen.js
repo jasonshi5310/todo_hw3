@@ -22,9 +22,10 @@ class ItemScreen extends React.Component {
         if (assignedTo === '') assignedTo = "unknown";
         if (dueDate === '') dueDate = null; 
         let listID = window.currentList.id;
+        let currentItem = window.currentItem;
         getFirestore().collection('todoLists').doc(listID).get().then(function(doc){
             let items = doc.data().items;
-            if (window.currentItem===null) // add a new item
+            if (currentItem===null) // add a new item
             {
                 let todoItem =  {
                     "key": items.length+1,
@@ -37,10 +38,8 @@ class ItemScreen extends React.Component {
             }
             else // edit a item
             {
-                console.log(items.indexOf(window.currentItem))
-                getFirestore().collection('todoLists').doc(listID).get('items').then(function(doc){
-                    console.log(doc);
-                })
+                // Need to get the ref of the item
+                console.log(items.indexOf(currentItem))
 
             }
             getFirestore().collection("todoLists").doc(listID).update({
@@ -53,17 +52,17 @@ class ItemScreen extends React.Component {
 
     loadItem = () => {
         let item = window.currentItem;
-        if (item!==null){
-            console.log(item);
-            let description = document.getElementById("item_description_textfield");
-           let assignedTo = document.getElementById("item_assigned_to_textfield");
-           let dueDate = document.getElementById("item_due_date_picker");
-            let completed = document.getElementById("item_completed_checkbox");
-            description.value = item.description;
-            assignedTo.value = item.assigned_to;
-            dueDate.value = item.due_date;
-            completed.checked = item.completed;
-        }
+        // if (item!==null){
+        //     console.log(item);
+        //     let description = document.getElementById("item_description_textfield");
+        //    let assignedTo = document.getElementById("item_assigned_to_textfield");
+        //    let dueDate = document.getElementById("item_due_date_picker");
+        //     let completed = document.getElementById("item_completed_checkbox");
+        //     description.value = item.description;
+        //     assignedTo.value = item.assigned_to;
+        //     dueDate.value = item.due_date;
+        //     completed.checked = item.completed;
+        // }
     }
 
     render() {
