@@ -141,15 +141,21 @@ class ListScreen extends Component {
 
     handleNameChange = (e) => {
         const list = getFirestore().collection("todoLists").doc(this.props.todoList.id);
+        let value = e.target.value;
+        if (value==='')
+            value = 'unknown';
         list.update({
-            name: e.target.value
+            name: value
         })
     }
 
     handleOwnerChange = (e) => {
         const list = getFirestore().collection("todoLists").doc(this.props.todoList.id);
+        let value = e.target.value;
+        if (value==='')
+            value = 'unknown';
         list.update({
-            owner: e.target.value
+            owner: value
         })
     }
 
